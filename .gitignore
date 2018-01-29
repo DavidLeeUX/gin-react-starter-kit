@@ -7,3 +7,5 @@
 
 .pid
 .DS_Store
+/.idea
+*.iml

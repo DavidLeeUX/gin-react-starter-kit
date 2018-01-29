@@ -74,6 +74,12 @@
   revision = "925541529c1fa6821df4e44ce2723319eb2be768"
 
 [[projects]]
+  name = "github.com/google/uuid"
+  packages = ["."]
+  revision = "064e2069ce9c359c118179501254f67d7d37ba24"
+  version = "0.2"
+
+[[projects]]
   branch = "master"
   name = "github.com/itsjamie/go-bindata-templates"
   packages = ["."]
@@ -105,6 +111,12 @@
     "fetch/internal/data"
   ]
   revision = "bb153be84336f26925890502929cc363477df7ad"
+
+[[projects]]
+  name = "github.com/olebedev/on"
+  packages = ["."]
+  revision = "f65b7c9823a4c30797e9ad3c51d559a36ff8d542"
+  version = "v0.2.0"
 
 [[projects]]
   name = "github.com/pkg/errors"
@@ -145,6 +157,12 @@
   revision = "e19ae1496984b1c655b8044a65c0300a3c878dd3"
 
 [[projects]]
+  name = "gopkg.in/fsnotify.v1"
+  packages = ["."]
+  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
+  version = "v1.4.7"
+
+[[projects]]
   name = "gopkg.in/go-playground/validator.v8"
   packages = ["."]
   revision = "5f1438d3fca68893a817e4a66806cea46a9e4ebf"
@@ -159,6 +177,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "2bedd458bacb4f82c411cb573b84b6382aa79e415a894fc45f887b899f74f99b"
+  inputs-digest = "8d234e7b73292b8dcaa16eea6aec610bbda3c353082d3880907d9c0752a7071d"
   solver-name = "gps-cdcl"
   solver-version = 1
