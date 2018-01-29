@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/labstack/echo"
+	"github.com/gin-gonic/gin"
 )
 
 // API is a defined as struct bundle
@@ -10,12 +10,15 @@ import (
 type API struct{}
 
 // Bind attaches api routes
-func (api *API) Bind(group *echo.Group) {
+func (api *API) Bind(group *gin.RouterGroup) {
 	group.GET("/v1/conf", api.ConfHandler)
 }
 
 // ConfHandler handle the app config, for example
-func (api *API) ConfHandler(c echo.Context) error {
-	app := c.Get("app").(*App)
-	return c.JSON(200, app.Conf.Root)
+func (api *API) ConfHandler(c *gin.Context) {
+	if app, ok := c.Get("app"); ok {
+		c.JSON(200, app.(*App).Conf.Root)
+	} else {
+		c.String(400, "False")
+	}
 }

@@ -5,12 +5,11 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/elazarl/go-bindata-assetfs"
 	"github.com/itsjamie/go-bindata-templates"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/gin-gonic/gin"
 	"github.com/nu7hatch/gouuid"
 	"github.com/olebedev/config"
+	"github.com/elazarl/go-bindata-assetfs"
 )
 
 // App struct.
@@ -18,7 +17,7 @@ import (
 // all variables defined locally inside
 // this struct.
 type App struct {
-	Engine *echo.Echo
+	Engine *gin.Engine
 	Conf   *config.Config
 	React  *React
 	API    *API
@@ -49,24 +48,20 @@ func NewApp(opts ...AppOptions) *App {
 	conf.Env()
 
 	// Make an engine
-	engine := echo.New()
+	engine := gin.New()
 
-	// Use precompiled embedded templates
-	engine.Renderer = NewTemplate()
+	// Logger for each request
+	engine.Use(gin.Logger())
 
-	// Set up echo debug level
-	engine.Debug = conf.UBool("debug")
+	// Recovery for any panics issue in system
+	engine.Use(gin.Recovery())
 
-	// Regular middlewares
-	engine.Use(middleware.Recover())
-
-	engine.GET("/favicon.ico", func(c echo.Context) error {
-		return c.Redirect(http.StatusMovedPermanently, "/static/images/favicon.ico")
+	engine.GET("/favicon.ico", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/static/images/favicon.ico")
 	})
 
-	engine.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: `${method} | ${status} | ${uri} -> ${latency_human}` + "\n",
-	}))
+	engine.LoadHTMLGlob("server/data/templates/*")
+
 
 	// Initialize the application
 	app := &App{
@@ -81,13 +76,11 @@ func NewApp(opts ...AppOptions) *App {
 	}
 
 	// Map app and uuid for every requests
-	app.Engine.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			c.Set("app", app)
-			id, _ := uuid.NewV4()
-			c.Set("uuid", id)
-			return next(c)
-		}
+	app.Engine.Use(func(c *gin.Context) {
+		c.Set("app", app)
+		id, _ := uuid.NewV4()
+		c.Set("uuid", id)
+		c.Next()
 	})
 
 	// Bind api hadling for URL api.prefix
@@ -104,39 +97,27 @@ func NewApp(opts ...AppOptions) *App {
 		AssetInfo: AssetInfo,
 	})
 
-	// Serve static via bindata and handle via react app
-	// in case when static file was not found
-	app.Engine.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			// execute echo handlers chain
-			err := next(c)
-			// if page(handler) for url/method not found
-			if err != nil {
-				httpErr, ok := err.(*echo.HTTPError)
-				if ok && httpErr.Code == http.StatusNotFound {
-					// check if file exists
-					// omit first `/`
-					if _, err := Asset(c.Request().URL.Path[1:]); err == nil {
-						fileServerHandler.ServeHTTP(
-							c.Response().Writer,
-							c.Request())
-						return nil
-					}
-					// if static file not found handle request via react application
-					return app.React.Handle(c)
-				}
-			}
-			// Move further if err is not `Not Found`
-			return err
+	//Serve static via bindata and handle via react app
+	//in case when static file was not found
+	engine.NoRoute(func(c *gin.Context){
+
+		if _, err := Asset(c.Request.URL.Path[1:]); err == nil {
+			fileServerHandler.ServeHTTP(
+				c.Writer,
+				c.Request)
+			return
 		}
+
+		app.React.Handle(c)
 	})
+
 
 	return app
 }
 
 // Run runs the app
 func (app *App) Run() {
-	Must(app.Engine.Start(":" + app.Conf.UString("port")))
+	Must(app.Engine.Run(":" + app.Conf.UString("port")))
 }
 
 // Template is custom renderer for Echo, to render html from bindata
@@ -152,7 +133,7 @@ func NewTemplate() *Template {
 }
 
 // Render renders template
-func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+func (t *Template) Render(w io.Writer, name string, data interface{}, c gin.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 

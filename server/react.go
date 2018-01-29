@@ -13,9 +13,9 @@ import (
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/eventloop"
 	"github.com/fatih/structs"
-	"github.com/labstack/echo"
 	"github.com/nu7hatch/gouuid"
 	"github.com/olebedev/gojax/fetch"
+	"github.com/gin-gonic/gin"
 )
 
 // React struct is contains JS vms
@@ -51,24 +51,32 @@ func NewReact(filePath string, debug bool, proxy http.Handler) *React {
 // Handle handles all HTTP requests which
 // have not been caught via static file
 // handler or other middlewares.
-func (r *React) Handle(c echo.Context) error {
-	UUID := c.Get("uuid").(*uuid.UUID)
-	defer func() {
-		if r := recover(); r != nil {
-			c.Render(http.StatusInternalServerError, "react.html", Resp{
-				UUID:  UUID.String(),
-				Error: r.(string),
-			})
-		}
-	}()
+func (r *React) Handle(c *gin.Context) {
+	raw_uuid, ok := c.Get("uuid");
+	if !ok {
+		c.Status(404)
+	}
+
+	UUID := raw_uuid.(*uuid.UUID)
+
+
+	//defer func() {
+	//	if r := recover(); r != nil {
+	//		c.HTML(http.StatusInternalServerError, "react.html", Resp{
+	//			UUID:  UUID.String(),
+	//			//Error: r.(string),
+	//		})
+	//	}
+	//}()
+
 
 	vm := r.get()
 
 	start := time.Now()
 	select {
 	case re := <-vm.Handle(map[string]interface{}{
-		"url":     c.Request().URL.String(),
-		"headers": map[string][]string(c.Request().Header),
+		"url":     c.Request.URL.String(),
+		"headers": map[string][]string(c.Request.Header),
 		"uuid":    UUID.String(),
 	}):
 		// Return vm back to the pool
@@ -79,25 +87,25 @@ func (r *React) Handle(c echo.Context) error {
 		// Handle the Response
 		if len(re.Redirect) == 0 && len(re.Error) == 0 {
 			// If no redirection and no errors
-			c.Response().Header().Set("X-React-Render-Time", re.RenderTime.String())
-			return c.Render(http.StatusOK, "react.html", re)
+			c.Writer.Header().Set("X-React-Render-Time", re.RenderTime.String())
+			c.HTML(http.StatusOK, "react.html",re)
 			// If redirect
 		} else if len(re.Redirect) != 0 {
-			return c.Redirect(http.StatusMovedPermanently, re.Redirect)
+			c.Redirect(http.StatusMovedPermanently, re.Redirect)
 			// If internal error
 		} else if len(re.Error) != 0 {
-			c.Response().Header().Set("X-React-Render-Time", re.RenderTime.String())
-			return c.Render(http.StatusInternalServerError, "react.html", re)
+			c.Writer.Header().Set("X-React-Render-Time", re.RenderTime.String())
+			c.HTML(http.StatusInternalServerError, "react.html", re)
 		}
 	case <-time.After(2 * time.Second):
 		// release the context
 		r.drop(vm)
-		return c.Render(http.StatusInternalServerError, "react.html", Resp{
+		c.HTML(http.StatusInternalServerError, "react.html", Resp{
 			UUID:  UUID.String(),
 			Error: "timeout",
 		})
 	}
-	return nil
+	return
 }
 
 // Resp is a struct for convinient
