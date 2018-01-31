@@ -1,9 +1,18 @@
-# go-starter-kit [![wercker status](https://app.wercker.com/status/cc4ddd2e2fec29ad988115a8b20b830a/s/master "wercker status")](https://app.wercker.com/project/byKey/cc4ddd2e2fec29ad988115a8b20b830a)
+# gin-react-starter-kit [![wercker status](https://app.wercker.com/status/cc4ddd2e2fec29ad988115a8b20b830a/s/master "wercker status")](https://app.wercker.com/project/byKey/cc4ddd2e2fec29ad988115a8b20b830a)
 
-> This project contains a quick starter kit for **Facebook React** Single Page Apps with **Golang** server side render via goja javascript engine, implemented in pure Golang and also with a set of useful features for rapid development of efficient applications.
+> This project was inspired by olebedev's [golang-starter-kit](https://github.com/olebedev/go-starter-kit) and improve some features which can bootstrap SPA web quickly and efficiently based on **Facebook React** and **Gin Golang Server side framework**.
 
-## What it contains?
+## Features
+### Front end
+* routing via [react-router](https://github.com/reactjs/react-router)
+* ES6 & JSX via [babel-loader](https://github.com/babel/babel-loader) with minimal runtime dependency footprint
+* [redux](https://rackt.org/redux/) as state container
+* [redux-devtools](https://github.com/gaearon/redux-devtools)
+* [Redux Saga](https://github.com/redux-saga) for asynchronous requests
+* hot reloading via [react-transform](https://github.com/gaearon/babel-plugin-react-transform) & [HMR](http://webpack.github.io/docs/hot-module-replacement.html)
 
+
+### Back end
 * server side render via [goja](https://github.com/dop251/goja)
 * api requests between your react application and server side application directly  via [fetch polyfill](https://github.com/olebedev/gojax/tree/master/fetch)
 * title, Open Graph and other domain-specific meta tags render for each page at the server and at the client
@@ -11,15 +20,10 @@
 * embedding static files into artefact via bindata
 * popular golang [gin](https://github.com/gin-gonic/gin) framework
 * advanced cli via [cli](https://github.com/codegangsta/cli)
-* Makefile based project
+* Makefile based projectd
 * one(!) terminal window process for development
-* routing via [react-router](https://github.com/reactjs/react-router)
-* ES6 & JSX via [babel-loader](https://github.com/babel/babel-loader) with minimal runtime dependency footprint
-* [redux](https://rackt.org/redux/) as state container
-* [redux-devtools](https://github.com/gaearon/redux-devtools)
 * css styles without global namespace via PostCSS, [css-loader](https://github.com/webpack/css-loader) & css-modules
 * separate css file to avoid FOUC
-* hot reloading via [react-transform](https://github.com/gaearon/babel-plugin-react-transform) & [HMR](http://webpack.github.io/docs/hot-module-replacement.html)
 * webpack bundle builder
 * eslint and golint rules for Makefile
 

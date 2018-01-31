@@ -15,14 +15,16 @@ export function run() {
   window.self = window;
   require('whatwg-fetch');
 
-  const store = createStore(window['--app-initial']);
-  setAsCurrentStore(store);
+  let store = createStore(window['--app-initial']);
+  store = setAsCurrentStore(store);
+  store.runSagas();
+
 
   render(
-    <Provider store={store} >
-      <Router history={browserHistory}>{createRoutes({store, first: { time: true }})}</Router>
-    </Provider>,
-    document.getElementById('app')
+  <Provider store={store} >
+    <Router history={browserHistory}>{createRoutes({store, first: { time: true }})}</Router>
+  </Provider>,
+  document.getElementById('app')
   );
 
 }

@@ -24,8 +24,9 @@ export default function (options, cbk) {
     redirect: null
   };
 
-  const store = createStore();
-  setAsCurrentStore(store);
+  let store = createStore();
+  store = setAsCurrentStore(store);
+  store.runSagas();
 
   try {
     match({ routes: createRoutes({store, first: { time: false }}), location: options.url }, (error, redirectLocation, renderProps) => {

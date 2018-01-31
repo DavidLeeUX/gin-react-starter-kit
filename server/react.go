@@ -97,7 +97,7 @@ func (r *React) Handle(c *gin.Context) {
 			c.Writer.Header().Set("X-React-Render-Time", re.RenderTime.String())
 			c.HTML(http.StatusInternalServerError, "react.html", re)
 		}
-	case <-time.After(2 * time.Second):
+	case <-time.After(5 * time.Second):
 		// release the context
 		r.drop(vm)
 		c.HTML(http.StatusInternalServerError, "react.html", Resp{
