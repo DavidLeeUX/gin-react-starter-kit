@@ -4,33 +4,32 @@
 
 ## Features
 ### Front end
-* routing via [react-router](https://github.com/reactjs/react-router)
+* Routing via [react-router](https://github.com/reactjs/react-router)
 * ES6 & JSX via [babel-loader](https://github.com/babel/babel-loader) with minimal runtime dependency footprint
-* [redux](https://rackt.org/redux/) as state container
-* [redux-devtools](https://github.com/gaearon/redux-devtools)
+* [Redux](https://rackt.org/redux/) as state container
+* [Redux-devtools](https://github.com/gaearon/redux-devtools)
 * [Redux Saga](https://github.com/redux-saga) for asynchronous requests
-* hot reloading via [react-transform](https://github.com/gaearon/babel-plugin-react-transform) & [HMR](http://webpack.github.io/docs/hot-module-replacement.html)
-
+* Hot reloading via [react-transform](https://github.com/gaearon/babel-plugin-react-transform) & [HMR](http://webpack.github.io/docs/hot-module-replacement.html)
+* Css styles without global namespace via PostCSS, [css-loader](https://github.com/webpack/css-loader) & css-modules
+* Webpack bundle builder
+* Eslint and golint rules for Makefile
 
 ### Back end
-* server side render via [goja](https://github.com/dop251/goja)
-* api requests between your react application and server side application directly  via [fetch polyfill](https://github.com/olebedev/gojax/tree/master/fetch)
-* title, Open Graph and other domain-specific meta tags render for each page at the server and at the client
-* server side redirect
-* embedding static files into artefact via bindata
-* popular golang [gin](https://github.com/gin-gonic/gin) framework
-* advanced cli via [cli](https://github.com/codegangsta/cli)
+* Server side render via [goja](https://github.com/dop251/goja)
+* Api requests between your react application and server side application directly  via [fetch polyfill](https://github.com/olebedev/gojax/tree/master/fetch)
+* Title, Open Graph and other domain-specific meta tags render for each page at the server and at the client
+* Server side redirect
+* Embedding static files into artefact via bindata
+* Popular golang [gin](https://github.com/gin-gonic/gin) framework
+* Advanced cli via [cli](https://github.com/codegangsta/cli)
 * Makefile based projectd
-* one(!) terminal window process for development
-* css styles without global namespace via PostCSS, [css-loader](https://github.com/webpack/css-loader) & css-modules
-* separate css file to avoid FOUC
-* webpack bundle builder
-* eslint and golint rules for Makefile
+* Separated config files: development, staging, production via [viper](https://github.com/spf13/viper)
+
 
 ## Workflow dependencies
 
-* [golang](https://golang.org/)
-* [node.js](https://nodejs.org/) with [yarn](https://yarnpkg.com)
+* [Golang](https://golang.org/)
+* [Node.js](https://nodejs.org/) with [yarn](https://yarnpkg.com)
 * [GNU make](https://www.gnu.org/software/make/)
 
 Note that probably not works at windows.
@@ -41,10 +40,13 @@ Note that probably not works at windows.
 ```
 $ tree server
 server
+├── config <-- Config file will be loaded via viper
+│   └── config-development.json
+│   └── config-staging.json
+│   └── config-production.json
 ├── api.go
 ├── app.go
 ├── bindata.go <-- this file is gitignored, it will appear at compile time
-├── conf.go
 ├── data
 │   └── templates
 │       └── react.html
@@ -84,6 +86,7 @@ client
 │   └── vars.js
 ├── index.js <-- main function declared here
 ├── reducers.js
+├── sagas.js
 ├── router
 │   ├── index.js
 │   ├── routes.js
@@ -100,7 +103,7 @@ The client app will be compiled into `server/data/static/build/`.  Then it will 
 Clone the repo:
 
 ```
-$ git clone git@github.com:olebedev/go-starter-kit.git $GOPATH/src/github.com/<username>/<project>
+$ https://github.com/ntquan1704/gin-react-starter-kit.git $GOPATH/src/github.com/<username>/<project>
 $ cd $GOPATH/src/github.com/<username>/<project>
 ```
 

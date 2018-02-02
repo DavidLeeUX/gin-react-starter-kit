@@ -43,6 +43,7 @@ serve: $(ON) $(GO_BINDATA) clean $(BUNDLE) restart
 	@$(NODE_BIN)/webpack --watch &
 	@$(ON) -m 2 $(GO_FILES) $(TEMPLATES) | xargs -n1 -I{} make restart || make kill
 
+
 restart: BINDATA_FLAGS += -debug
 restart: LDFLAGS += -X main.debug=true
 restart: $(BINDATA) kill $(TARGET)
