@@ -8,8 +8,10 @@ import (
 	"github.com/itsjamie/go-bindata-templates"
 	"github.com/gin-gonic/gin"
 	"github.com/nu7hatch/gouuid"
-	"github.com/olebedev/config"
 	"github.com/elazarl/go-bindata-assetfs"
+	"github.com/spf13/viper"
+	"os"
+	"fmt"
 )
 
 // App struct.
@@ -18,7 +20,7 @@ import (
 // this struct.
 type App struct {
 	Engine *gin.Engine
-	Conf   *config.Config
+	Conf   *viper.Viper
 	React  *React
 	API    *API
 }
@@ -34,18 +36,22 @@ func NewApp(opts ...AppOptions) *App {
 
 	options.init()
 
-	// Parse config yaml string from ./conf.go
-	conf, err := config.ParseYaml(confString)
-	Must(err)
 
-	// Set config variables delivered from main.go:11
-	// Variables defined as ./conf.go:3
-	conf.Set("debug", debug)
-	conf.Set("commitHash", commitHash)
+	envVar := os.Getenv("ENV")
 
-	// Parse environ variables for defined
-	// in config constants
-	conf.Env()
+	if envVar == ""{
+		envVar = "development"
+	}
+
+	viper.Set("ENV", envVar)
+
+	viper.SetConfigName("config-" + envVar)
+	viper.AddConfigPath("server/config/")
+
+	err := viper.ReadInConfig() // Find and read the config file
+	if err != nil { // Handle errors reading the config file
+		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	}
 
 	// Make an engine
 	engine := gin.New()
@@ -62,15 +68,14 @@ func NewApp(opts ...AppOptions) *App {
 
 	engine.LoadHTMLGlob("server/data/templates/*")
 
-
 	// Initialize the application
 	app := &App{
-		Conf:   conf,
+		Conf:   viper.GetViper(),
 		Engine: engine,
 		API:    &API{},
 		React: NewReact(
-			conf.UString("duktape.path"),
-			conf.UBool("debug"),
+			viper.GetString("duktape.path"),
+			viper.GetBool("debug"),
 			engine,
 		),
 	}
@@ -86,7 +91,7 @@ func NewApp(opts ...AppOptions) *App {
 	// Bind api hadling for URL api.prefix
 	app.API.Bind(
 		app.Engine.Group(
-			app.Conf.UString("api.prefix"),
+			app.Conf.GetString("api.prefix"),
 		),
 	)
 
@@ -117,7 +122,7 @@ func NewApp(opts ...AppOptions) *App {
 
 // Run runs the app
 func (app *App) Run() {
-	Must(app.Engine.Run(":" + app.Conf.UString("port")))
+	Must(app.Engine.Run(":" + app.Conf.GetString("port")))
 }
 
 // Template is custom renderer for Echo, to render html from bindata

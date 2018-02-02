@@ -52,6 +52,12 @@
   version = "v1.0"
 
 [[projects]]
+  name = "github.com/fsnotify/fsnotify"
+  packages = ["."]
+  revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
+  version = "v1.4.7"
+
+[[projects]]
   branch = "master"
   name = "github.com/gin-contrib/sse"
   packages = ["."]
@@ -68,22 +74,38 @@
   version = "v1.2"
 
 [[projects]]
-  branch = "master"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   revision = "925541529c1fa6821df4e44ce2723319eb2be768"
+  version = "v1.0.0"
 
 [[projects]]
-  name = "github.com/google/uuid"
-  packages = ["."]
-  revision = "064e2069ce9c359c118179501254f67d7d37ba24"
-  version = "0.2"
+  branch = "master"
+  name = "github.com/hashicorp/hcl"
+  packages = [
+    ".",
+    "hcl/ast",
+    "hcl/parser",
+    "hcl/scanner",
+    "hcl/strconv",
+    "hcl/token",
+    "json/parser",
+    "json/scanner",
+    "json/token"
+  ]
+  revision = "23c074d0eceb2b8a5bfdbb271ab780cde70f05a8"
 
 [[projects]]
   branch = "master"
   name = "github.com/itsjamie/go-bindata-templates"
   packages = ["."]
   revision = "78f87e838df0fb89dbcd26e1489f988cd7bc3bb8"
+
+[[projects]]
+  name = "github.com/magiconair/properties"
+  packages = ["."]
+  revision = "d419a98cdbed11a922bf76f257b7c4be79b50e73"
+  version = "v1.7.4"
 
 [[projects]]
   name = "github.com/mattn/go-isatty"
@@ -93,15 +115,15 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/nu7hatch/gouuid"
+  name = "github.com/mitchellh/mapstructure"
   packages = ["."]
-  revision = "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
+  revision = "b4575eea38cca1123ec2dc90c26529b5c5acfcff"
 
 [[projects]]
   branch = "master"
-  name = "github.com/olebedev/config"
+  name = "github.com/nu7hatch/gouuid"
   packages = ["."]
-  revision = "9a10d05a33a8b9e828f20491e21e8927dec35f72"
+  revision = "179d4d0c4d8d407a32af483c2354df1d2c91e6c3"
 
 [[projects]]
   branch = "master"
@@ -119,10 +141,49 @@
   version = "v0.2.0"
 
 [[projects]]
+  name = "github.com/pelletier/go-toml"
+  packages = ["."]
+  revision = "acdc4509485b587f5e675510c4f2c63e90ff68a8"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
+
+[[projects]]
+  name = "github.com/spf13/afero"
+  packages = [
+    ".",
+    "mem"
+  ]
+  revision = "bb8f1927f2a9d3ab41c9340aa034f6b803f4359c"
+  version = "v1.0.2"
+
+[[projects]]
+  name = "github.com/spf13/cast"
+  packages = ["."]
+  revision = "acbeb36b902d72a7a4c18e8f3241075e7ab763e4"
+  version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/spf13/jwalterweatherman"
+  packages = ["."]
+  revision = "7c0cea34c8ece3fbeb2b27ab9b59511d360fb394"
+
+[[projects]]
+  name = "github.com/spf13/pflag"
+  packages = ["."]
+  revision = "e57e3eeb33f795204c1ca35f56c44f83227c6e66"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/spf13/viper"
+  packages = ["."]
+  revision = "25b30aa063fc18e48662b86996252eabdcf2f0c7"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/ugorji/go"
@@ -134,7 +195,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "ff2a66f350cefa5c93a634eadb5d25bb60c85a9c"
+  revision = "8f27ce8a604014414f8dfffc25cbcde83a3f2216"
 
 [[projects]]
   branch = "master"
@@ -177,6 +238,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8d234e7b73292b8dcaa16eea6aec610bbda3c353082d3880907d9c0752a7071d"
+  inputs-digest = "ee5547137be1a8ecd272f99ae4280a7266fe8389ac6e4274b5ee173169288e0e"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -17,7 +17,7 @@ func (api *API) Bind(group *gin.RouterGroup) {
 // ConfHandler handle the app config, for example
 func (api *API) ConfHandler(c *gin.Context) {
 	if app, ok := c.Get("app"); ok {
-		c.JSON(200, app.(*App).Conf.Root)
+		c.JSON(200, app.(*App).Conf.AllSettings())
 	} else {
 		c.String(400, "False")
 	}
