@@ -16,19 +16,12 @@ GIT_HASH      = $(shell git rev-parse HEAD)
 LDFLAGS       = -w -X main.commitHash=$(GIT_HASH)
 DEPS         := $(shell command -v dep 2> /dev/null)
 
-build: 
-	$(ON) $(GO_BINDATA) clean $(TARGET)
+build: $(ON) $(GO_BINDATA) clean $(TARGET)
 
 clean:
 	@rm -rf server/data/static/build/*
 	@rm -rf server/data/bundle.server.js
 	@rm -rf $(BINDATA)
-
-$(ON):
-	go install $(IMPORT_PATH)/vendor/github.com/olebedev/on
-
-$(GO_BINDATA):
-	go install $(IMPORT_PATH)/vendor/github.com/jteeuwen/go-bindata/...
 
 $(BUNDLE): $(APP)
 	@$(NODE_BIN)/webpack --progress --colors --bail
