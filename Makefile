@@ -14,9 +14,10 @@ APP_NAME      = $(shell pwd | sed 's:.*/::')
 TARGET        = $(BIN)/$(APP_NAME)
 GIT_HASH      = $(shell git rev-parse HEAD)
 LDFLAGS       = -w -X main.commitHash=$(GIT_HASH)
-GLIDE         := $(shell command -v glide 2> /dev/null)
+DEPS         := $(shell command -v dep 2> /dev/null)
 
-build: $(ON) $(GO_BINDATA) clean $(TARGET)
+build: 
+	$(ON) $(GO_BINDATA) clean $(TARGET)
 
 clean:
 	@rm -rf server/data/static/build/*
@@ -60,8 +61,10 @@ lint:
 install:
 	@yarn install
 
-ifdef GLIDE
-	@glide install
+ifdef DEPS
+	@go get github.com/olebedev/on
+	@go get -u github.com/jteeuwen/go-bindata/...
+	@dep ensure
 else
-	$(warning "Skipping installation of Go dependencies: glide is not installed")
+	$(warning "Skipping installation of Go dependencies: godep is not installed")
 endif

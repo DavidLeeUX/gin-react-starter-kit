@@ -31,6 +31,7 @@
 * [Golang](https://golang.org/)
 * [Node.js](https://nodejs.org/) with [yarn](https://yarnpkg.com)
 * [GNU make](https://www.gnu.org/software/make/)
+* [Go Dep](https://github.com/golang/dep) For golang packages management
 
 Note that probably not works at windows.
 
@@ -103,8 +104,8 @@ The client app will be compiled into `server/data/static/build/`.  Then it will 
 Clone the repo:
 
 ```
-$ https://github.com/ntquan1704/gin-react-starter-kit.git $GOPATH/src/github.com/<username>/<project>
-$ cd $GOPATH/src/github.com/<username>/<project>
+$ https://github.com/ntquan1704/gin-react-starter-kit.git $GOPATH/src/<project>
+$ cd $GOPATH/src/<project>
 ```
 
 Install dependencies:
