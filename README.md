@@ -126,7 +126,13 @@ that's it. Open [http://localhost:5001/](http://localhost:5001/)(if you use defa
 
 ## Build
 
-Install dependencies and type `NODE_ENV=production make build`. This rule is producing webpack build and regular golang build after that. Result you can find at `$GOPATH/bin`. Note that the binary will be named **as the current project directory**.
+Install dependencies and type `ENV=production make build`. This rule is producing webpack build and regular golang build after that. Result you can find at `$GOPATH/bin`. Note that the binary will be named **as the current project directory**.
+
+## RUN IN PRODUCTION
+- cd $GOPATH/src/<project>
+- Run: ENV=production $GOPATH/bin/<project> run
+
+Open [http://localhost:5000/](http://localhost:5000/) 
 
 ## License
 MIT
